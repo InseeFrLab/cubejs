@@ -17,7 +17,7 @@ case $ARCH in
 esac
 
 echo "Downloading $FILENAME..."
-wget -O "$FILENAME" "https://github.com/duckdb/duckdb/releases/download/v1.3.1/$FILENAME"
+wget -O "$FILENAME" "https://github.com/duckdb/duckdb/releases/download/v1.4.4/$FILENAME"
 
 
 echo "Trying to unzip..."
