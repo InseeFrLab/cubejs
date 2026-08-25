@@ -16,8 +16,21 @@ case $ARCH in
         ;;
 esac
 
+DUCKDB_VERSION=$(
+  awk '
+    /^duckdb@/ { found=1; next }
+    found && /^  version / {
+      gsub(/"/, "", $2)
+      print $2
+      exit
+    }
+  ' /cube/yarn.lock
+)
+
+echo "DuckDB version: $DUCKDB_VERSION"
+
 echo "Downloading $FILENAME..."
-wget -O "$FILENAME" "https://github.com/duckdb/duckdb/releases/download/v1.4.1/$FILENAME"
+wget -O "$FILENAME" "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/$FILENAME"
 
 
 echo "Trying to unzip..."

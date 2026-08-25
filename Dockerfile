@@ -1,4 +1,4 @@
-FROM cubejs/cube:v1.6.62
+FROM cubejs/cube:v1.6.67
 
 COPY --chmod=0755 scripts/ /opt/
 
