@@ -16,9 +16,9 @@ case $ARCH in
         ;;
 esac
 
-DUCKDB_VERSION=$(
+DUCKDB_NODE_VERSION=$(
   awk '
-    /^duckdb@/ { found=1; next }
+    /^"@duckdb\/node-api@/ { found=1; next }
     found && /^  version / {
       gsub(/"/, "", $2)
       print $2
@@ -27,10 +27,22 @@ DUCKDB_VERSION=$(
   ' /cube/yarn.lock
 )
 
-echo "DuckDB version: $DUCKDB_VERSION"
+# 1.5.5-r.5 -> 1.5.5
+DUCKDB_VERSION="${DUCKDB_NODE_VERSION%%-r.*}"
+
+if [ -z "$DUCKDB_VERSION" ]; then
+  echo "ERROR: impossible de déterminer la version de DuckDB depuis yarn.lock" >&2
+  exit 1
+fi
+
+echo "DuckDB Node version: $DUCKDB_NODE_VERSION"
+echo "DuckDB version:      $DUCKDB_VERSION"
+
+FILENAME="duckdb_cli-linux-amd64.zip"
 
 echo "Downloading $FILENAME..."
-wget -O "$FILENAME" "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/$FILENAME"
+wget -O "$FILENAME" \
+  "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/${FILENAME}"
 
 
 echo "Trying to unzip..."
